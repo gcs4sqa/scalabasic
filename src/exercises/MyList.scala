@@ -26,7 +26,7 @@ abstract class MyList [+A] {
 
 }
 
-object Empty extends MyList [Nothing]{
+case object Empty extends MyList [Nothing]{
   def head : Nothing = throw new NoSuchElementException
   def tail : MyList [Nothing] = throw new NoSuchElementException
   def isEmpty : Boolean = true
@@ -39,7 +39,7 @@ object Empty extends MyList [Nothing]{
   override def ++[B >: Nothing](list: MyList[B]): MyList[B] = list
 }
 
-class Cons [+A](h: A, t: MyList [A]) extends MyList [A]{
+case class Cons [+A](h: A, t: MyList [A]) extends MyList [A]{
   override def head: A = h
   override def tail: MyList [A] = t
   override def isEmpty: Boolean = false
@@ -105,6 +105,7 @@ trait MyTransformer[-A, B]{
 
 object ListTest extends App {
   val listofInteger: MyList[Int]  = new Cons(1, new Cons(2, new Cons(3, Empty)))
+  val clonelistofInteger: MyList[Int]  = new Cons(1, new Cons(2, new Cons(3, Empty)))
   val anotherListofInteger: MyList[Int]  = new Cons(4, new Cons(5, Empty))
   println(listofInteger.tail.head)
   println(listofInteger.add(4).head)
@@ -127,6 +128,9 @@ object ListTest extends App {
   println(listofInteger.flatmap(new MyTransformer[Int, MyList[Int]] {
     override def transform(element: Int): MyList[Int] = new Cons(element, new Cons(element + 1, Empty))
   }).toString)
+
+  println(listofInteger ==  clonelistofInteger)
+  println(clonelistofInteger)
 }
 
 
