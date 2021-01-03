@@ -19,4 +19,7 @@ object AnonymousClasses extends App {
    */
 
   println(funnyAnimal.getClass)
+
+
+
 }
