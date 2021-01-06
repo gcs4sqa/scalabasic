@@ -19,7 +19,7 @@ abstract class MyList [+A] {
   override def toString: String = "[" + printElements + "]"
 
   def map[B] (transformer: A => B): MyList[B]
-  def flatmap[B] (transformer: A => MyList[B]): MyList[B]
+  def flatMap[B] (transformer: A => MyList[B]): MyList[B]
   def filter(predicate: A => Boolean): MyList[A]
 
   def ++[B >: A](list: MyList[B]): MyList[B]
@@ -37,7 +37,7 @@ case object Empty extends MyList [Nothing]{
   def add[B >: Nothing](element: B): MyList [B] = new Cons(element, Empty)
   def printElements: String = ""
   def map[B] (transformer: Nothing => B): MyList[B] = Empty
-  def flatmap[B] (transformer: Nothing => MyList[B]): MyList[B] = Empty
+  def flatMap[B] (transformer: Nothing => MyList[B]): MyList[B] = Empty
   def filter(predicate: Nothing => Boolean): MyList[Nothing] = Empty
 
   override def ++[B >: Nothing](list: MyList[B]): MyList[B] = list
@@ -82,8 +82,8 @@ case class Cons [+A](h: A, t: MyList [A]) extends MyList [A]{
   = [1,2,2,3]
    */
 
-  override def flatmap[B](transformer: A => MyList[B]): MyList[B] =
-    transformer(h) ++ t.flatmap(transformer)
+  override def flatMap[B](transformer: A => MyList[B]): MyList[B] =
+    transformer(h) ++ t.flatMap(transformer)
 
   /*
   how the filter works
@@ -175,6 +175,13 @@ object ListTest extends App {
   println(listofString)
   println(anotherListofInteger.zipWith[String, String](listofString, _ + "-" + _ ))
   println(listofInteger.fold(0)(_+_))
+
+  val combs = for {
+   n <- listofInteger
+    string <- listofString
+  } yield n + "-" + string
+
+  println(combs)
 }
 
 
